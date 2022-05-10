@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text, TextInput, FlatList, TouchableOpacity, SafeAreaView} from 'react-native';
+import {View, StyleSheet, Text, TextInput, FlatList, TouchableOpacity, SafeAreaView, ScrollView} from 'react-native';
 import uuid from 'react-native-uuid';
 
 const RenderItem = ({item}) =>{
@@ -18,10 +18,10 @@ const RenderItemDetails = ({item}) =>{
         <View style = {styles.resultRow}>
             <Text style = {{fontWeight: "bold"}}>{item.Name}</Text>
             <View style = {styles.details}>
-               {item.Cultivar && <Text>Cultivar: {item.Cultivar}</Text>}
-               {item.Care &&  <Text>Care: {item.Care}</Text> }
-               {item.Location && <Text>Location: {item.Location}</Text> }
-               {item.Reference &&  <Text>Reference: {item.Reference}</Text> }
+               {item.Cultivar && <View><Text>Cultivar: {item.Cultivar}</Text></View>}
+               {item.Care &&  <View><Text>Care: {item.Care}</Text></View>}
+               {item.Location && <View><Text>Location: {item.Location}</Text></View>}
+               {item.Reference &&  <View><Text>Reference: {item.Reference}</Text></View>}
             </View>
         </View>
     </TouchableOpacity>
@@ -49,6 +49,7 @@ const SearchBar = props =>{
 
     //This function is meant to complement the function filterData
     //Based the criteria entered into the parameter, it determines what property name is to be used in the search query
+
     const searchByCriteria = (obj, criteria) =>{
         switch(criteria){
             case "Name":{
@@ -81,6 +82,7 @@ const SearchBar = props =>{
 
     }
 
+
     //This function collects the search results into the an array and returns it
     //It uses the method Array.filter(/*boolean evaluation*/)
     //It returns an array with all the values that passes the boolean evaluation inside the parameter
@@ -111,26 +113,26 @@ const SearchBar = props =>{
     }, [query])
 
     return(
-        <View style = {styles.searchContainer}>
+        <SafeAreaView style = {styles.searchContainer}>
             <View style = {styles.inputContainer}>
                 <TextInput value = {query} onChangeText = {handleTextChange} styles = {styles.textInput} placeholder = "Search"/>
             </View>
             {displayResults &&
-            <View>
+            <View showsVerticalScrollIndicator={false} style = {styles.scrollContainer}>
                 <FlatList
                     data={results}
                      key = {uuid}
-                     renderItem={item => RenderItem(item)}
+                     keyExtractor = {(item, index) =>{return index.toString()}}
+                     renderItem={item => RenderItemDetails(item)}
+                     showsVerticalScrollIndicator={false}
                 />
             </View>
             }
-        </View>
+        </SafeAreaView>
     )
 }
 
 export default SearchBar;
-
-
 
  const styles = StyleSheet.create({
  searchContainer:{
@@ -138,15 +140,28 @@ export default SearchBar;
     justifyContent: 'center',
     alignItems: 'center',
  },
+ scrollContainer:{
+    marginTop: 20,
+ },
  textInput:{
     borderWidth: 2,
     borderColor: "#000000",
     paddingVertical: 10,
     paddingLeft: 5,
+    width: "90%",
+    marginLeft: "auto",
+    marginRight: "auto",
+
  },
  inputContainer: {
  borderWidth: 2,
  width: '80%',
+ position: 'fixed',
+ top: 0,
+ zIndex: 1,
+ backgroundColor: '#ffffff',
+ marginBottom: 10,
+
  },
  resultRow: {
      marginVertical: 10,
