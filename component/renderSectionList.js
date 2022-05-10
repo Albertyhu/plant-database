@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, TextInput,TouchableOpacity, SafeAreaView, SectionList} from 'react-native';
 import uuid from 'react-native-uuid';
 
-const renderSectionHeader = ({section}) => <Text>{section.title}</Text>
+const renderSectionHeader = ({section: {title}}) => <Text style = {styles.sectionTitle}>{title}</Text>
 
 const RenderItemDetails = ({item}) =>{
     return(
-    <TouchableOpacity>
+    <TouchableOpacity style = {styles.mainContainer}>
         <View style = {styles.resultRow}>
-            <Text style = {{fontSize: 16, fontWeight: "bold", fontStyle: "italic"}}>{item.Name}</Text>
+            <Text style = {styles.itemName}>{item.Name}</Text>
             <View style = {styles.details}>
                {!!item.Cultivar && <View style = {styles.textContainer} ><Text style = {styles.boldTitle}>Cultivar:</Text><Text style = {styles.detail}> {item.Cultivar}</Text></View>}
                {!!item["Cutting Type"] && <View style = {styles.textContainer}><Text style = {styles.boldTitle}>Cutting Type:</Text><Text style = {styles.detail}>  {item["Cutting Type"]}</Text></View>}
@@ -55,7 +55,7 @@ return(
         <SectionList
             sections = {data}
             renderItem = {RenderItemDetails}
-            renderSectionHeader={renderSectionHeader}
+            //renderSectionHeader={renderSectionHeader}
             keyExtractor = {(item, index) =>{return index.toString()}}
         />
     </View>
@@ -84,4 +84,21 @@ export default RenderSectionList;
     flexShrink: 1,
 
  },
+  details:{
+
+    justifContent: 'flex-start',
+  },
+ itemName:{
+ fontSize: 16,
+ fontWeight: "bold",
+ fontStyle: "italic",
+ paddingRight: 10,
+
+ },
+  mainContainer:{
+    flexDirection: 'column',
+  },
+  sectionTitle:{
+    fontSize: 24,
+  },
  })

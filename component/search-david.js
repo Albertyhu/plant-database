@@ -155,6 +155,7 @@ export default SearchBar;
      backgroundColor: "#daf2e0",
      paddingVertical: 5,
      paddingLeft: 5,
+     paddingRight: 5,
  },
  resultRow: {
      marginVertical: 10,
